@@ -5,6 +5,7 @@ Manage [git-cl](https://github.com/BHFock/git-cl) changelists directly in VS Cod
 ## Features
 
 - **Changelists in Source Control** — Each changelist appears as a group in the Source Control sidebar with file status decorations (modified, added, deleted, untracked).
+- **List and tree views** — Toggle the Changelists view between a flat list (file name with its directory alongside) and a folder tree, using the button in the view title bar.
 - **Add files from anywhere** — Right-click files in the built-in Git Changes section or the Unassigned group to assign them to a changelist.
 - **Stage, commit, diff, revert per changelist** — Inline buttons on each changelist header let you stage, commit, diff, or revert all files in the group with one click.
 - **Stash & unstash changelists** — Temporarily shelve a changelist (or all of them) and restore later. Stash metadata tracks source branch and timestamps.
@@ -71,6 +72,8 @@ All commands are available via the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+
 | Command | Description |
 |---------|-------------|
 | `git-cl: Refresh Changelists` | Reload changelists and Git status |
+| `git-cl: View as Tree` | Show changelist files in a folder hierarchy |
+| `git-cl: View as List` | Show changelist files as a flat list with directories |
 | `git-cl: Add to Changelist` | Add files to a changelist |
 | `git-cl: Remove from Changelist` | Remove files from their changelist |
 | `git-cl: Delete Changelist` | Delete a changelist |

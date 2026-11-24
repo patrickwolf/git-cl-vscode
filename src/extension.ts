@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { getGitRoot, getGitCommonDir, getGitDir, getGitStatus, gitAdd, gitReset, gitCommit, gitCheckout, gitStashPush, gitStashDrop, gitStashPop, gitStashList, getCurrentBranch, gitCheckoutBranch, gitBranchExists, gitCheckoutExistingBranch } from './gitUtils';
-import { ChangelistTreeDataProvider, TreeNode } from './changelistTreeProvider';
+import { ChangelistTreeDataProvider, TreeNode, ViewMode } from './changelistTreeProvider';
 import { validateChangelistName } from './changelistStore';
 import { FileCategories, StashMetadata } from './stashStore';
 
@@ -47,6 +47,19 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		canSelectMany: true,
 	});
 	context.subscriptions.push(scmProvider, treeView);
+
+	const setViewMode = (mode: ViewMode, persist = true) => {
+		scmProvider.setViewMode(mode);
+		vscode.commands.executeCommand('setContext', 'git-cl:viewMode', mode);
+		if (persist) {
+			context.workspaceState.update('git-cl.viewMode', mode);
+		}
+	};
+	setViewMode(context.workspaceState.get<ViewMode>('git-cl.viewMode', 'list'), false);
+	context.subscriptions.push(
+		vscode.commands.registerCommand('git-cl.viewAsTree', () => setViewMode('tree')),
+		vscode.commands.registerCommand('git-cl.viewAsList', () => setViewMode('list')),
+	);
 
 	const statusCmd = vscode.commands.registerCommand('git-cl.showStatus', async () => {
 		await showFormattedStatus(outputChannel, scmProvider, gitRoot);

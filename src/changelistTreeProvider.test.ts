@@ -91,6 +91,23 @@ describe('ChangelistTreeDataProvider refresh', () => {
 		expect(provider.getChildren()).toEqual([]);
 	});
 
+	it('groups files into folders in tree mode and flattens them in list mode', async () => {
+		const files = ['src/a/x.ts', 'src/a/y.ts', 'src/b.ts', 'root.txt'];
+		fs.writeFileSync(path.join(commonDir, 'cl.json'), JSON.stringify({ feature: files }));
+		await provider.refresh();
+		const cl = { type: 'changelist' as const, name: 'feature' };
+		const file = (filePath: string) => ({ type: 'changelistFile', filePath, changelistName: 'feature' });
+
+		expect(provider.getChildren(cl)).toEqual(files.map(file));
+
+		provider.setViewMode('tree');
+		const src = { type: 'folder' as const, dirPath: 'src', container: cl };
+		const srcA = { type: 'folder' as const, dirPath: 'src/a', container: cl };
+		expect(provider.getChildren(cl)).toEqual([src, file('root.txt')]);
+		expect(provider.getChildren(src)).toEqual([srcA, file('src/b.ts')]);
+		expect(provider.getChildren(srcA)).toEqual([file('src/a/x.ts'), file('src/a/y.ts')]);
+	});
+
 	it.each(['change', 'create', 'delete'] as const)('reloads after a cl.json %s event', async event => {
 		fs.writeFileSync(path.join(commonDir, 'cl.json'), '{}');
 		mocks.watchers[0][event]?.();

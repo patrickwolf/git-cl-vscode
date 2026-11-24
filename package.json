@@ -29,6 +29,18 @@
         "icon": "$(refresh)"
       },
       {
+        "command": "git-cl.viewAsTree",
+        "title": "View as Tree",
+        "category": "git-cl",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "git-cl.viewAsList",
+        "title": "View as List",
+        "category": "git-cl",
+        "icon": "$(list-flat)"
+      },
+      {
         "command": "git-cl.showStatus",
         "title": "Show Changelist Status",
         "category": "git-cl",
@@ -254,9 +266,19 @@
       ],
       "view/title": [
         {
+          "command": "git-cl.viewAsTree",
+          "when": "view == git-cl.changelists && git-cl:viewMode != tree",
+          "group": "navigation@1"
+        },
+        {
+          "command": "git-cl.viewAsList",
+          "when": "view == git-cl.changelists && git-cl:viewMode == tree",
+          "group": "navigation@1"
+        },
+        {
           "command": "git-cl.refresh",
           "when": "view == git-cl.changelists",
-          "group": "navigation"
+          "group": "navigation@2"
         },
         {
           "command": "git-cl.deleteAllChangelists",
